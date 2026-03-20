@@ -1,12 +1,6 @@
 # PROFIBUS-DP Telegram Decoder
 
-A simple Python tool for decoding raw PROFIBUS-DP bitstreams captured from an oscilloscope into readable telegrams.
-
-This tool focuses on:
-- UART frame decoding (start, data, parity, stop)
-- Automatic bit alignment detection
-- Extraction of PROFIBUS telegrams (SD1, SD2, SD3, SD4)
-- Human-readable output
+A Python tool for decoding raw PROFIBUS-DP bitstreams captured from an oscilloscope into readable telegrams.
 
 ---
 
@@ -16,7 +10,7 @@ This tool focuses on:
 - Automatic alignment detection
 - Adaptive decoding with re-synchronization on errors
 - Supports multiple telegrams in one stream
-- FCS validation
+- FCS and message integrity validation
 
 ---
 
@@ -39,7 +33,7 @@ This tool focuses on:
 
 2. The decoder:
    - Detects correct bit alignment
-   - Validates parity, start, and stop bits
+   - Validates parity, start and stop bits
 
 3. The extractor:
    - Synchronizes on PROFIBUS start delimiters:
@@ -58,6 +52,7 @@ Spaces in the input are ignored.
 
 ## Example Output
 
+```
 Decoded 10 bytes:
 A2 01 02 03 55 5B 16 DC 01 02
 
@@ -79,16 +74,33 @@ Token telegram
 Start delimiter: DC
 Destination address: 01
 Source address: 02
+```
 
 ---
 
-## Disclaimer
+## How to read bits from an oscilloscope screen
+
+1. Zoom in until individual spike periods are clearly visible
+   
+2. Start from a falling edge (start bit)
+
+3. Use the time grid or cursors to determine the spike width/time and calculate bit amount (one bit transmit time (s) = 1 / baudrate)
+
+4. Write down the value at each sample point:
+   - Low → 0
+   - High → 1
+
+Example shown in **Profibus_bitstream_example.PNG**
+
+---
+
+## Note
 
 This is not a perfect or production-ready decoder.
 
 - Intended for debugging and learning purposes
 - Works best on short captures
-- Can usually handle a few telegrams at a time
+- Can usually handle a few telegrams at a time in one stream
 
 ---
 
